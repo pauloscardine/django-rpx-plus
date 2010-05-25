@@ -183,11 +183,9 @@ def register(request):
             #print data
             
             #We create the new user object and associate it with our RpxData
-            #object:
-            u = User()
-            u.username = data['username']
-            u.email = data['email']
-            u.save()
+            #object. Since we don't provide a password, set_unusable_password()
+            #will automatically be called:
+            u = User.objects.create_user(data['username'], data['email'])
 
             rd.user = u
             rd.save()
