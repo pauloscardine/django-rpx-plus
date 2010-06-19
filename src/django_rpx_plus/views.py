@@ -207,9 +207,11 @@ def register(request):
         #We try to pre-populate the form with data from the RPX login.
         rpx_profile = rd.profile
 
-        #Clean the username to allow only alphanum and underscore.
+        #Clean the username to allow only alphanum and underscore. If no 
+        #provided names are available, set username to an empty string so that
+        #re won't raise TypeError.
         username =  rpx_profile.get('preferredUsername') or \
-                    rpx_profile.get('displayName')
+                    rpx_profile.get('displayName') or ''
         username = re.sub(r'[^\w+]', '', username)
 
         form = RegisterForm(initial = {
