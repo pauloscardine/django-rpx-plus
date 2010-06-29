@@ -170,6 +170,12 @@ Authors
 
 * Brian Ellin (RPX Product Manager)
   Provided an [initial recipe][3] for interacting with RPX.
+
+
+License
+-------
+
+django-rpx-plus is BSD licensed.
   
 
 TODO
