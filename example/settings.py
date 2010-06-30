@@ -85,7 +85,7 @@ if BUILT_IN_MESSAGES_FRAMEWORK:
 else:
     MIDDLEWARE_CLASSES.append('django_messages_framework.middleware.MessageMiddleware')
 
-ROOT_URLCONF = 'example.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
