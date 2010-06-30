@@ -13,7 +13,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 # trunk, I think)
 BUILT_IN_MESSAGES_FRAMEWORK = False
 try:
-    import django.contrib.messages.context_processors.messages
+    import django.contrib.messages.context_processors
     BUILT_IN_MESSAGES_FRAMEWORK = True
 except ImportError:
     pass
