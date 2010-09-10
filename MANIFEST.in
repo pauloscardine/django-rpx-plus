@@ -1,0 +1,3 @@
+include setup.py README.md MANIFEST.in LICENSE
+recursive-include src/django_rpx_plus/templates *
+global-exclude *~
