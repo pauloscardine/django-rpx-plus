@@ -1,0 +1,52 @@
+# Fr translation for django-rpx-plus.
+# Copyright (C) 2011
+# This file is distributed under the same license as the django-rpx-plus package.
+# Stephane Angel / Twidi <s.angel@twidi.com>, 2011.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: django-rpx-plus\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-06-26 01:26+0200\n"
+"PO-Revision-Date: 2011-06-26 01:26+0200\n\n"
+"Last-Translator: Stephane Angel / Twidi <s.angel@twidi.com>\n"
+"Language-Team: French <None>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:7
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: forms.py:8
+msgid "The username must contain only letters, numbers and underscores."
+msgstr "Le nom d'utilisateur ne doit contenir que des lettres, des nombres et des tirets bas _."
+
+#: forms.py:9
+msgid "Email Address"
+msgstr "Adresse email"
+
+#: forms.py:20
+msgid "Username already exists! Please choose another one."
+msgstr "Ce nom d'utilisateur est déjà utilisé. Merci de bien vouloir en choisir un autre."
+
+#: views.py:98 views.py:137
+msgid "There was an error in signing you in. Try again?"
+msgstr "Une erreur est survenue en vous identifiant. Essayer à nouveau ?"
+
+#: views.py:126
+msgid "Sorry, this login has already been associated with another account."
+msgstr "Désolé, mais cet identifiant a déjà été associé à un autre compte."
+
+#: views.py:134
+msgid "We successfully associated your new login!"
+msgstr "Votre nouvel identifiant a bien été associé !"
+
+#: views.py:266
+#, python-format
+msgid "Your %(provider)s login was successfully deleted."
+msgstr "Votre identifiant %(provider)s a bien été supprimé."
