@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext_lazy as _
 
 #The reason why we use django's urlencode instead of urllib's urlencode is that
 #django's version can operate on unicode strings.
@@ -53,14 +54,14 @@ def rpx_response(request):
     #var that specifies where the user should be redirected after successful
     #login.
     destination = request.POST.get('next', settings.LOGIN_REDIRECT_URL)
-            
+
     if request.method == 'POST':
         #RPX also sends token back via POST. We pass this token to our RPX auth
-        #backend which, then, uses the token to access the RPX API to confirm 
+        #backend which, then, uses the token to access the RPX API to confirm
         #that the user logged in successfully and to obtain the user's login
         #information.
         token = request.POST.get('token', False)
-        if token: 
+        if token:
             response = auth.authenticate(token = token)
             #The django_rpx_plus auth backend can return three things: None (means
             #that auth has failed), a RpxData object (means that user has passed
@@ -73,13 +74,13 @@ def rpx_response(request):
             elif type(response) == RpxData:
                 #Successful auth, but user is NOT registered! So we redirect
                 #user to the register page. However, in order to tell the
-                #register view that the user is authed but not registered, 
-                #we set a session var that points to the RpxData object 
+                #register view that the user is authed but not registered,
+                #we set a session var that points to the RpxData object
                 #primary ID. After the user has been registered, this session
                 #var will be removed.
                 request.session[RPX_ID_SESSION_KEY] = response.id
-                #For security purposes, there could be a case where user 
-                #decides not to register but then never logs out either. 
+                #For security purposes, there could be a case where user
+                #decides not to register but then never logs out either.
                 #Another person can come along and then use the REGISTER_URL
                 #to continue creating the account. So we expire this session
                 #after a set time interval. (Note that this session expiry
@@ -94,7 +95,7 @@ def rpx_response(request):
 
     #Authentication has failed. We'll send user  back to login page where error
     #message is displayed.
-    messages.error(request, 'There was an error in signing you in. Try again?')
+    messages.error(request, _('There was an error in signing you in. Try again?'))
     query_params = urlencode({'next': destination})
     return redirect(reverse('auth_login')+'?'+query_params)
 
@@ -104,25 +105,25 @@ def associate_rpx_response(request):
     '''
     Similar to rpx_response except that the logic for handling the response
     cases is tailored for associating a new RPX login with an existing User.
-    
+
     @param request: Django request object.
     @return: Redirect user back to 'auth_associate'.
     '''
     #Since this function and rpx_response(...) are very similar, removed much
-    #of comments from this function for clarity. Refer to rpx_response's 
+    #of comments from this function for clarity. Refer to rpx_response's
     #comments if you want to know what's going on.
     if request.method == 'POST':
         #A difference here is that we default redirect to auth_associate
         #instead of LOGIN_REDIRECT_URL.
         destination = request.POST.get('next', reverse('auth_associate'))
-            
+
         token = request.POST.get('token', False)
-        if token: 
+        if token:
             response = auth.authenticate(token = token)
             if type(response) == User:
                 #Successful auth and user is registered. This means that the
                 #login has already been registered. So we display error.
-                messages.error(request, 'Sorry, this login has already been associated with another account.')
+                messages.error(request, _('Sorry, this login has already been associated with another account.'))
             elif type(response) == RpxData:
                 #Successful auth, but user is NOT registered! So we associate
                 #this RPX login with the current user.
@@ -130,10 +131,10 @@ def associate_rpx_response(request):
                 rpxdata.user = request.user
                 rpxdata.save()
 
-                messages.success(request, 'We successfully associated your new login!')
+                messages.success(request, _('We successfully associated your new login!'))
             else:
                 #Do nothing, auth has failed.
-                messages.error(request, 'There was an error in signing you in. Try again?')
+                messages.error(request, _('There was an error in signing you in. Try again?'))
 
     return redirect(destination)
 
@@ -157,7 +158,7 @@ def register(request):
     Checks to see if user is logged in and unregistered. Then displays and
     handles form for creating a new User. Then associates the user's RPX login
     with the newly created User.
-    
+
     @param request: Django request object.
     @return: Rendered register.html or redirect user.
     '''
@@ -174,14 +175,14 @@ def register(request):
         rd = RpxData.objects.get(id = rpxdata_id)
     except (KeyError, RpxData.DoesNotExist):
         return redirect(next)
-    
+
     #Check form submission.
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             #print data
-            
+
             #We create the new user object and associate it with our RpxData
             #object. Since we don't provide a password, set_unusable_password()
             #will automatically be called:
@@ -202,12 +203,12 @@ def register(request):
             auth.login(request, u)
 
             return redirect(next)
-    else: 
+    else:
         #No form submission so we will display page with initial form data.
         #We try to pre-populate the form with data from the RPX login.
         rpx_profile = rd.profile
 
-        #Clean the username to allow only alphanum and underscore. If no 
+        #Clean the username to allow only alphanum and underscore. If no
         #provided names are available, set username to an empty string so that
         #re won't raise TypeError.
         username =  rpx_profile.get('preferredUsername') or \
@@ -235,9 +236,9 @@ def associate(request):
     #Get associated accounts for user.
     user_rpxdatas = RpxData.objects.filter(user = request.user)
 
-    #Our rpx_response is different from our usual URL since we need to use a 
+    #Our rpx_response is different from our usual URL since we need to use a
     #different view to handle the logic behind associating another account. This
-    #is why we pass in 'rpx_response_path'. 
+    #is why we pass in 'rpx_response_path'.
     return render_to_response('django_rpx_plus/associate.html', {
                                 'rpxdatas': user_rpxdatas,
                                 'extra': {'next': reverse('auth_associate')},
@@ -249,7 +250,7 @@ def associate(request):
 def delete_associated_login(request, rpxdata_id):
     '''
     Deletes an associated login from the User.
-    
+
     @param request: Django request object.
     @type rpxdata_id: integer
     @param rpxdata_id: ID (primary key) of RpxData object to delete.
@@ -262,7 +263,7 @@ def delete_associated_login(request, rpxdata_id):
         if num_logins > 1:
             #Okay, so we can delete this RPX login:
             r = RpxData.objects.get(id = rpxdata_id, user = request.user)
-            messages.success(request, 'Your '+r.provider+' login was successfully deleted.')
+            messages.success(request, _('Your %(provider)s login was successfully deleted.') % r.provider)
             r.delete()
     except RpxData.DoesNotExist:
         #Silent error.
