@@ -16,7 +16,7 @@ def _rpx_common(request, extra = '', rpx_response = False):
 
     @param request: Django request object.
     @type extra: dict
-    @param extra: Extra query string/parameters to include in the token_url. 
+    @param extra: Extra query string/parameters to include in the token_url.
                   Useful for adding GET params that will be passed back to the
                   rpx_response handler. Example usage would be to include a
                   'next' GET param which signifies where the user will be
@@ -46,21 +46,21 @@ def _rpx_common(request, extra = '', rpx_response = False):
     token_url = "http://%s%s%s" % (base_host,
                                    rpx_response,
                                    extra)
-    
+
     #If LocaleMiddleware is being used, request.LANGUAGE_CODE is set. We will allow
     #the LANGUAGE_CODE to override settings.RPX_LANGUAGE_PREFERENCE. However, since
     #django's LANGUAGE_CODE does not map cleanly to RPX's language preference, we
     #make a best attempt through helpers.django_lang_code_to_rpx_lang_preference.
-    #If neither request.LANGUAGE_CODE nor settings.RPX_LANGUAGE_PREFERENCE is set, 
+    #If neither request.LANGUAGE_CODE nor settings.RPX_LANGUAGE_PREFERENCE is set,
     #we will default to settings.LANGUAGE_CODE (which is usually 'en-us').
     try:
         language_preference = django_lang_code_to_rpx_lang_preference(request.LANGUAGE_CODE)
     except AttributeError:
         #If settings.RPX_LANGUAGE_PREFERENCE isn't set, then we will use
         #settings.LANGUAGE_CODE
-        language_preference = getattr(settings, 'RPX_LANGUAGE_PREFERENCE', 
+        language_preference = getattr(settings, 'RPX_LANGUAGE_PREFERENCE',
                                       django_lang_code_to_rpx_lang_preference(settings.LANGUAGE_CODE))
-    print language_preference
+    #print language_preference
     return {
         'realm': settings.RPXNOW_REALM,
         'token_url': token_url,
@@ -73,7 +73,7 @@ def rpx_link(context, text, extra = '', rpx_response = False):
     '''
     Template tag that returns an HTML link that, when clicked, displays
     the RPX login widget in a popup. Requires including rpx_script.html
-    in the page before </body> (which you can do by using 
+    in the page before </body> (which you can do by using
     {% rpx_script %}). The way it works is by returning HTML like:
         <a class="rpxnow" onclick="return false;" href="[rpx link]"> [text]</a>
     rpx_script's javascript watches for links with class="rpxnow" to trigger
@@ -121,7 +121,7 @@ def rpx_script(context, extra = '', rpx_response = False, flags = ''):
     @return: Template var dictionary for use in inclusion template snippet.
     '''
     common = _rpx_common(context['request'], extra, rpx_response)
-    
+
     #Add additional template vars
     common['flags'] = flags
 
