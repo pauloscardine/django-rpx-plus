@@ -55,6 +55,12 @@ def rpx_response(request):
     #login.
     destination = request.POST.get('next', settings.LOGIN_REDIRECT_URL)
 
+    #If the user uses the back button, they may get to this view with a used
+    #token.  RPX will respond that auth has failed.  So, if the user is
+    #already authenticated, just send them to the next URL
+    if request.user.is_authenticated():
+        return redirect(destination)
+
     if request.method == 'POST':
         #RPX also sends token back via POST. We pass this token to our RPX auth
         #backend which, then, uses the token to access the RPX API to confirm
@@ -145,9 +151,11 @@ def login(request):
     @param request: Django request object.
     @return: Rendered login.html page.
     '''
-    next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-    extra = {'next': next}
-
+    destination = request.GET.get('destination', settings.LOGIN_REDIRECT_URL)
+    if request.user.is_authenticated():
+        return redirect(destination)
+    
+    extra = {'next': destination}
     return render_to_response('django_rpx_plus/login.html', {
                                 'extra': extra,
                               },
