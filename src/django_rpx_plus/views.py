@@ -75,8 +75,12 @@ def rpx_response(request):
             #auth AND registered).
             if type(response) == User:
                 #Successful auth and user is registered so we login user.
-                auth.login(request, response)
-                return redirect(destination)
+                if response.is_active:
+                    auth.login(request, response)
+                    return redirect(destination)
+                else:
+                    messages.error(request, 'This account has been deactivated.')
+                    return redirect(settings.LOGIN_REDIRECT_URL)
             elif type(response) == RpxData:
                 #Successful auth, but user is NOT registered! So we redirect
                 #user to the register page. However, in order to tell the
