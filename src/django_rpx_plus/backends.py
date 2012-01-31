@@ -113,5 +113,7 @@ class RpxBackend:
         #data from RPX, then return the User object.
         rd.profile = rpx_profile
         rd.save()
+        rd.user.rpxdata_used = rd
 
         return rd.user
+
