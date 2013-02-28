@@ -5,8 +5,8 @@ class RpxData(models.Model):
     #Primary key field is automatically created.
     
     #The RPX identifier is essentially an OpenID URL.
-    identifier = models.URLField(unique = True, verify_exists = False,
-                                 max_length = 255, db_index = True)
+    identifier = models.URLField(unique = True, max_length = 255,
+                                 db_index = True)
     #The name of the auth provider (eg. Google, Twitter, Facebook, etc.).
     provider = models.CharField(max_length = 255)
     
