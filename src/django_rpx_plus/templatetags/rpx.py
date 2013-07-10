@@ -1,3 +1,5 @@
+import json
+
 from django import template
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -177,4 +179,24 @@ def rpx_url(context, extra = '', rpx_response = False):
     '''
     common = _rpx_common(context['request'], extra, rpx_response)
 
+    return common
+
+
+@register.inclusion_tag('django_rpx_plus/rpx_widget_script.html', takes_context = True)
+def rpx_widget_script(context, extra = '', rpx_response = False):
+    '''
+    Template tag that returns the 2013 widget script.  It is intended for the
+    <head> of the page.  The user places the widget with the body tag:
+    <div id="janrainEngageEmbed"></div>
+
+    @param context: Django context object. It's passed automatically because
+                    we have takes_context = True for inclusion_tag decorator.
+    @param extra: See _rpx_common docstring.
+    @param rpx_response: See _rpx_common docstring.
+    @rtype: dict
+    @return: Template var dictionary for use in inclusion template snippet.
+    '''
+    rpx_settings = extra.pop('settings', getattr(settings, 'RPX_SETTINGS', {}))
+    common = _rpx_common(context['request'], extra, rpx_response)
+    common['settings'] = json.dumps(rpx_settings)
     return common
