@@ -1,7 +1,7 @@
 <script type="text/javascript">
     (function() {
         if (typeof window.janrain !== 'object') window.janrain = {};
-        if (typeof window.janrain.settings !== 'object') window.janrain.settings = {{ settings|escapejs }};
+        if (typeof window.janrain.settings !== 'object') window.janrain.settings = {{ settings|safe }};
         janrain.settings.tokenUrl = '{{ token_url }}';
         janrain.settings.language = '{{ language_preference }}';
 
