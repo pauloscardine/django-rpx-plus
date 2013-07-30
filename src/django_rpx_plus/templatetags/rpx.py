@@ -45,9 +45,7 @@ def _rpx_common(request, extra = '', rpx_response = False):
     #Also check for empty var:
     if not base_host:
         base_host = request.get_host()
-    token_url = "http://%s%s%s" % (base_host,
-                                   rpx_response,
-                                   extra)
+    token_url = "https://%s%s%s" % (base_host, rpx_response, extra)
 
     #If LocaleMiddleware is being used, request.LANGUAGE_CODE is set. We will allow
     #the LANGUAGE_CODE to override settings.RPX_LANGUAGE_PREFERENCE. However, since
