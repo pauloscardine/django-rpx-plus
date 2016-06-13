@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 setup(
     name='django_rpx_plus',
@@ -12,7 +11,7 @@ setup(
     packages=find_packages('src', exclude=['example', 'example.*']),
     package_dir={'' : 'src'},
     include_package_data=True,
-    version='1.0.0',
+    version='1.0.1',
     description='RPX auth support for django',
     author='Michael Huynh',
     author_email='mike@mikexstudios.com',

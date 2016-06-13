@@ -1,13 +1,18 @@
+import urllib2
+
+import django
 from django.conf import settings
 from django.contrib.auth.models import User
 #The reason why we use django's urlencode instead of urllib's urlencode is that
 #django's version can operate on unicode strings.
 from django.utils.http import urlencode
-from django.utils import simplejson
 
 from django_rpx_plus.models import RpxData
 
-import urllib2
+if django.VERSION[:2] <= (1, 6):
+    from django.utils import simplejson
+else:
+    import simplejson
 
 RPX_API_AUTH_URL = 'https://rpxnow.com/api/v2/auth_info'
 
