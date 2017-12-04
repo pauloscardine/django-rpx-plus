@@ -77,9 +77,13 @@ def rpx_response(request):
                 #Successful auth and user is registered so we login user.
                 if response.is_active:
                     auth.login(request, response)
+                    signals.rpx_login.send(
+                        sender=None, request=request, success=True)
                     return redirect(destination)
                 else:
                     messages.error(request, 'This account has been deactivated.')
+                    signals.rpx_login.send(
+                        sender=None, request=request, success=False)
                     return redirect(settings.LOGIN_REDIRECT_URL)
             elif type(response) == RpxData:
                 #Successful auth, but user is NOT registered! So we redirect
@@ -107,6 +111,7 @@ def rpx_response(request):
     #message is displayed.
     messages.error(request, _('There was an error in signing you in. Try again?'))
     query_params = urlencode({'next': destination})
+    signals.rpx_login.send(sender=None, request=request, success=False)
     return redirect(reverse('auth_login')+'?'+query_params)
 
 @login_required #User needs to be logged into an account in order to associate.
@@ -205,7 +210,8 @@ def register(request):
 
             #Might want to perform some kind of post-registration action so we
             #send a signal. sender is None since we aren't sending within an obj.
-            signals.registration_successful.send(sender = None, user = u)
+            signals.registration_successful.send(
+                sender=None, request=request, user=u)
 
             #Now we log the user in. This also clears out the previous session
             #containing the expiring RPX_ID_SESSION_KEY var. Normally, we get
