@@ -11,7 +11,7 @@ setup(
     packages=find_packages('src', exclude=['example', 'example.*']),
     package_dir={'' : 'src'},
     include_package_data=True,
-    version='1.0.2',
+    version='1.0.3',
     description='RPX auth support for django',
     author='Michael Huynh',
     author_email='mike@mikexstudios.com',
