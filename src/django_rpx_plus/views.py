@@ -48,6 +48,13 @@ def rpx_response(request):
     @param request: Django request object.
     @return: Redirect that takes user to 'next' or LOGIN_REDIRECT_URL.
     '''
+    #For allowing tests on a local development environment
+    if (settings.DEBUG and request.scheme == "http" 
+        and request.method != "POST" 
+        and request.get.get_raw_uri().startswith("http://localhost:")):
+        request.POST = request.GET
+        request.method = "POST"
+
     #According to http://rpxwiki.com/Passing-state-through-RPX, the query
     #string parameters in our token url will be POST to our rpx_response so
     #that we can retain some state information. We use this for 'next', a
